@@ -1,4 +1,4 @@
-// server.js (TEST SÜRÜMÜ - SÜRE 0 GÜN)
+// server.js (NORMAL ÇALIŞAN FİNAL SÜRÜM - SÜRE 30 GÜN)
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
@@ -72,8 +72,8 @@ app.post('/login', (req, res) => {
             } else {
                 const firstUsedDate = new Date(row.first_used_at); 
                 const expiryDate = new Date(firstUsedDate);
-                // -------> TEST İÇİN DEĞİŞTİRİLEN SATIR <-------
-                expiryDate.setDate(firstUsedDate.getDate() + 0); 
+                // -------> TEKRAR NORMAL HALİNE DÖNDÜ <-------
+                expiryDate.setDate(firstUsedDate.getDate() + 30); 
                 if (expiryDate > new Date()) { 
                     req.session.isLoggedIn = true; res.redirect('/viewer'); 
                 } else { 
