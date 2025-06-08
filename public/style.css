@@ -1,0 +1,117 @@
+/* public/style.css */
+
+/* Genel Sayfa Ayarları */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f2f5;
+    color: #1c1e21;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Ana Konteyner */
+.main-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px;
+}
+
+/* Kart Tasarımı */
+.card {
+    background-color: #fff;
+    border: 1px solid #dddfe2;
+    border-radius: 8px;
+    padding: 25px;
+    margin-top: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Form Elementleri */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+input[type="text"],
+input[type="password"],
+textarea {
+    width: 95%;
+    padding: 12px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-family: monospace;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+button {
+    padding: 12px 20px;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Başlıklar ve Linkler */
+h1, h2 {
+    text-align: center;
+    color: #0d1d35;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.logout-link {
+    display: block;
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 25px 0;
+}
+
+/* Mobil Cihazlar için Ayarlar */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    .main-container {
+        margin: 10px;
+    }
+    .card {
+        padding: 15px;
+    }
+}

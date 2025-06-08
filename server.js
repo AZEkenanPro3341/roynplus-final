@@ -1,17 +1,15 @@
-// server.js (Production'a Hazır, Stabil Final Sürüm)
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const sqlite3 = require('sqlite3').verbose();
 const axios = require('axios');
 const path = require('path');
-const SQLiteStore = require('connect-sqlite3')(session); // Session için yeni paket
+const SQLiteStore = require('connect-sqlite3')(session);
 const app = express();
 
 const PORT = process.env.PORT || 8000;
 const ADMIN_KEY = process.env.ADMIN_KEY || 'BDaP5924';
 
-// Veritabanı yolunu ve bağlantısını tek bir yerde, en başta tanımlıyoruz
 const dbPath = path.join(process.env.RENDER_DISK_MOUNT_PATH || '.', 'keys.db');
 const db = new sqlite3.Database(dbPath, (err) => {
     if (err) { console.error("Veritabanı ana bağlantı hatası:", err.message); } 
@@ -29,7 +27,7 @@ function loadSettings(callback) {
     });
 }
 
-// --- Microsoft Graph API Fonksiyonları --- (Değişiklik yok)
+// --- Microsoft Graph API Fonksiyonları ---
 let msGraphToken = { accessToken: null, expiresAt: 0 };
 async function getMsGraphToken() { if (msGraphToken.accessToken && Date.now() < msGraphToken.expiresAt) { return msGraphToken.accessToken; } if (!settings.tenant_id || !settings.client_id || !settings.client_secret) { console.log("Azure ayarları eksik, token alınamıyor."); return null; } const tokenUrl = `https://login.microsoftonline.com/${settings.tenant_id}/oauth2/v2.0/token`; const params = new URLSearchParams(); params.append('grant_type', 'client_credentials'); params.append('client_id', settings.client_id); params.append('client_secret', settings.client_secret); params.append('scope', 'https://graph.microsoft.com/.default'); try { const response = await axios.post(tokenUrl, params); msGraphToken.accessToken = response.data.access_token; msGraphToken.expiresAt = Date.now() + (response.data.expires_in - 300) * 1000; console.log("Yeni bir Microsoft Graph API token'ı alındı."); return msGraphToken.accessToken; } catch (error) { console.error("HATA: Microsoft'tan token alınamadı.", error.response?.data); return null; } }
 async function getLatestEmail() { const accessToken = await getMsGraphToken(); if (!accessToken) return { error: 'API token alınamadı. Lütfen admin panelinden Azure ayarlarını kontrol edin.' }; if (!settings.target_user_id) return { error: 'Hedef mail adresi admin panelinde ayarlanmamış.' }; const graphUrl = `https://graph.microsoft.com/v1.0/users/${settings.target_user_id}/messages?$filter=from/emailAddress/address eq 'no-reply@account.capcut.com'&$top=20&$select=subject,from,receivedDateTime,body`; try { const response = await axios.get(graphUrl, { headers: { 'Authorization': `Bearer ${accessToken}` } }); const messages = response.data.value; if (messages && messages.length > 0) { messages.sort((a, b) => new Date(b.receivedDateTime) - new Date(a.receivedDateTime)); return messages[0]; } else { return null; } } catch (error) { const errorMessage = error.response?.data?.error?.message || error.message; return { error: `Mail çekilemedi: ${errorMessage}` }; } }
@@ -38,17 +36,19 @@ async function getLatestEmail() { const accessToken = await getMsGraphToken(); i
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 
-// Session ayarlarını kalıcı depolama kullanacak şekilde güncelliyoruz
+// YENİ EKLENEN SATIR: 'public' klasörünü dışarıya açar
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(session({
     store: new SQLiteStore({
-        db: 'sessions.db', // Oturumlar için ayrı bir veritabanı dosyası adı
-        dir: path.dirname(dbPath), // Ana veritabanıyla aynı klasöre kaydet (Render'da /data olacak)
+        db: 'sessions.db',
+        dir: path.dirname(dbPath),
         table: 'sessions'
     }),
     secret: 'klavyemden-cıkan-cok-gizli-kelimeler-2',
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 } // Oturum 1 hafta sürsün
+    cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 }
 }));
 
 // --- Rotalar ---

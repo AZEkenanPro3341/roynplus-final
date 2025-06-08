@@ -2,33 +2,25 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giriş Yap</title>
-    <style>
-        body { 
-            font-family: sans-serif; 
-            text-align: center; 
-            padding-top: 50px; 
-        } 
-        footer { 
-            margin-top: 40px; 
-            color: #888; 
-            font-size: 0.9em; 
-        }
-    </style>
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <h1>Lütfen Erişim Anahtarınızı Girin</h1>
-    <form action="/login" method="post">
-        <input type="text" name="key" size="40" placeholder="Anahtarınızı buraya yapıştırın">
-        <button type="submit">Giriş Yap</button>
-    </form>
-
-    <% if (locals.error) { %>
-        <p style="color:red;"><%= error %></p>
-    <% } %>
-
-    <footer>
-        <p>roynplus sunar...</p>
-    </footer>
+    <div class="main-container">
+        <div class="card">
+            <h1>Lütfen Erişim Anahtarınızı Girin</h1>
+            <form action="/login" method="post">
+                <input type="text" name="key" placeholder="Anahtarınızı buraya yapıştırın">
+                <button type="submit">Giriş Yap</button>
+            </form>
+            <% if (locals.error) { %>
+                <p style="color:red; margin-top: 15px;"><%= error %></p>
+            <% } %>
+        </div>
+        <footer>
+            <p>roynplus sunar...</p>
+        </footer>
+    </div>
 </body>
 </html>
