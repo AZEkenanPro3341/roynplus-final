@@ -1,0 +1,19 @@
+{
+  "name": "roynplus-projesi",
+  "version": "1.0.0",
+  "description": "Outlook maillerini anahtarla gösteren web uygulaması.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Roynplus",
+  "license": "ISC",
+  "dependencies": {
+    "sqlite3": "^5.1.7",
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0"
+  }
+}

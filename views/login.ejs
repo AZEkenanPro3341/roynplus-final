@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Giriş Yap</title>
+    <style>
+        body { 
+            font-family: sans-serif; 
+            text-align: center; 
+            padding-top: 50px; 
+        } 
+        footer { 
+            margin-top: 40px; 
+            color: #888; 
+            font-size: 0.9em; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Lütfen Erişim Anahtarınızı Girin</h1>
+    <form action="/login" method="post">
+        <input type="text" name="key" size="40" placeholder="Anahtarınızı buraya yapıştırın">
+        <button type="submit">Giriş Yap</button>
+    </form>
+
+    <% if (locals.error) { %>
+        <p style="color:red;"><%= error %></p>
+    <% } %>
+
+    <footer>
+        <p>roynplus sunar...</p>
+    </footer>
+</body>
+</html>

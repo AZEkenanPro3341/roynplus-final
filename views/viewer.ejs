@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background-color: #f7f7f7; }
+        .main-container { max-width: 800px; margin: auto; }
+        .card { border: 1px solid #e1e1e1; padding: 25px; margin-top: 20px; border-radius: 8px; background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .logout-link { display: block; text-align: right; margin-bottom: 10px; }
+        input[type="text"], input[type="password"], textarea { width: 95%; min-height: 20px; padding: 10px; font-size: 1em; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 10px; font-family: monospace; }
+        button { padding: 10px 20px; font-size: 1em; color: white; background-color: #007bff; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <a href="/logout" class="logout-link">Çıkış Yap</a>
+        <hr>
+
+        <% if (locals.isAdmin) { %>
+            <div class="card">
+                <h2>Yönetici Paneli</h2>
+                <form action="/update-azure-settings" method="post">
+                    <h4>Azure Ayarları</h4>
+                    <label for="tenant_id">Tenant ID</label>
+                    <input type="text" id="tenant_id" name="tenant_id" value="<%= locals.settings.tenant_id %>">
+                    <label for="client_id">Client ID</label>
+                    <input type="text" id="client_id" name="client_id" value="<%= locals.settings.client_id %>">
+                    <label for="client_secret">Client Secret</label>
+                    <input type="password" id="client_secret" name="client_secret" value="<%= locals.settings.client_secret %>">
+                    <label for="target_user_id">Target User ID (Mail Adresi)</label>
+                    <input type="text" id="target_user_id" name="target_user_id" value="<%= locals.settings.target_user_id %>">
+                    <button type="submit">Azure Ayarlarını Kaydet</button>
+                </form>
+                <hr style="margin: 30px 0;">
+                <form action="/update-copy-text" method="post">
+                    <h4>Kopyalanacak Metni Düzenle</h4>
+                    <textarea name="new_text" rows="8"><%= locals.settings.copy_text %></textarea>
+                    <br><br>
+                    <button type="submit">Kopyalanacak Metni Kaydet</button>
+                </form>
+            </div>
+        <% } else { %>
+            <div class="card">
+                <h2>Mail İçeriği</h2>
+                <textarea id="copy-content" readonly style="display:none;"><%= locals.settings.copy_text %></textarea>
+                <button onclick="copyToClipboard()">maili kopyala</button>
+                <p id="copy-feedback" style="color:green;"></p>
+            </div>
+        <% } %>
+
+        <div class="card">
+            <h2>Gelen Son Mail (Referans)</h2>
+             <% if (locals.email && !locals.email.error) { %>
+                <p><strong>Geliş Tarihi:</strong> <%= new Date(email.receivedDateTime).toLocaleString('tr-TR') %></p>
+                <p><strong>Konu:</strong> <%= email.subject %></p>
+                <p><strong>Gönderen:</strong> <%= email.from.emailAddress.name %></p>
+                <hr>
+                <div><%- email.body.content %></div>
+             <% } else if (locals.email && locals.email.error) { %>
+                <p style="color:red;"><strong>Hata:</strong> <%= email.error %></p>
+             <% } else { %>
+                <p>Referans mail bulunamadı veya ayarlar henüz girilmedi.</p>
+             <% } %>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard() {
+            const content = document.getElementById('copy-content');
+            navigator.clipboard.writeText(content.value).then(() => {
+                const feedback = document.getElementById('copy-feedback');
+                feedback.textContent = 'Metin başarıyla kopyalandı!';
+                setTimeout(() => { feedback.textContent = ''; }, 2000);
+            }).catch(err => {
+                console.error('Kopyalama başarısız oldu: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
