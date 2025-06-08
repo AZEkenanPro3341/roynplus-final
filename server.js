@@ -37,11 +37,12 @@ async function getLatestEmail() { const accessToken = await getMsGraphToken(); i
 // --- Express Ayarları ---
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
+
 // Session ayarlarını kalıcı depolama kullanacak şekilde güncelliyoruz
 app.use(session({
     store: new SQLiteStore({
-        db: 'sessions.db', // Oturumlar için ayrı bir veritabanı dosyası
-        dir: path.dirname(dbPath), // Ana veritabanıyla aynı klasöre kaydet
+        db: 'sessions.db', // Oturumlar için ayrı bir veritabanı dosyası adı
+        dir: path.dirname(dbPath), // Ana veritabanıyla aynı klasöre kaydet (Render'da /data olacak)
         table: 'sessions'
     }),
     secret: 'klavyemden-cıkan-cok-gizli-kelimeler-2',
@@ -51,7 +52,6 @@ app.use(session({
 }));
 
 // --- Rotalar ---
-// Artık rotaların içinde 'new sqlite3.Database' demeyeceğiz, global 'db' objesini kullanacağız.
 app.get('/', (req, res) => { res.render('login', { error: null }); });
 
 app.post('/login', (req, res) => {
