@@ -9,11 +9,12 @@
   "author": "Roynplus",
   "license": "ISC",
   "dependencies": {
-    "sqlite3": "^5.1.7",
     "axios": "^1.7.2",
+    "connect-sqlite3": "^0.9.15",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
-    "express-session": "^1.18.0"
+    "express-session": "^1.18.0",
+    "sqlite3": "^5.1.7"
   }
 }
