@@ -126,7 +126,7 @@ app.post('/update-azure-settings', (req, res) => {
 
 app.get('/logout', (req, res) => { req.session.destroy(() => { res.redirect('/'); }); });
 
-// Sunucu başlamadan önce ayarları yükle
+// Sunucu başlamadan önce ayarları yüklee
 loadSettings((err) => {
     if (err) { console.error("Sunucu başlatılamadı, ayarlar yüklenemedi."); process.exit(1); }
     app.listen(PORT, () => { console.log(`Sunucu ${PORT} numaralı portta başarıyla başlatıldı.`); });

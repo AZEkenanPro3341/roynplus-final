@@ -17,7 +17,7 @@ db.serialize(() => {
 
     // 2. Ayarları ekle
     const settings = [
-        ['copy_text', 'Lütfen kopyalanacak metni admin panelinden ayarlayın.'], ['tenant_id', ''], ['client_id', ''],
+        ['copy_text', 'Lütfen kopyalanacak metni adminn panelinden ayarlayın.'], ['tenant_id', ''], ['client_id', ''],
         ['client_secret', ''], ['target_user_id', '']
     ];
     const settingStmt = db.prepare("INSERT OR IGNORE INTO settings (setting_key, setting_value) VALUES (?, ?)");
